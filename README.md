@@ -4,6 +4,14 @@ ncnn implementation of SRMD super resolution.
 
 srmd-ncnn-vulkan uses [ncnn project](https://github.com/Tencent/ncnn) as the universal neural network inference framework.
 
+## [Download](https://github.com/nihui/srmd-ncnn-vulkan/releases)
+
+Download Windows Executable for Intel/AMD/Nvidia GPU
+
+**https://github.com/nihui/srmd-ncnn-vulkan/releases**
+
+This package includes all the binaries and models required. It is portable, so no CUDA or Caffe runtime environment is needed :)
+
 ## Usages
 
 ### Example Command
@@ -27,6 +35,7 @@ Usage: srmd-ncnn-vulkan -i infile -o outfile [options]...
   -m model-path        srmd model path (default=models-srmd)
   -g gpu-id            gpu device to use (default=0)
   -j load:proc:save    thread count for load/proc/save (default=1:2:2)
+  -x                   enable tta mode
 ```
 
 - `input-path` and `output-path` accept either file path or directory path
@@ -40,6 +49,37 @@ If you encounter crash or error, try to upgrade your GPU driver
 - Intel: https://downloadcenter.intel.com/product/80939/Graphics-Drivers
 - AMD: https://www.amd.com/en/support
 - NVIDIA: https://www.nvidia.com/Download/index.aspx
+
+## Sample Images
+
+### Original Image
+
+![origin](images/0.jpg)
+
+### Upscale 4x with ImageMagick Lanczo4 Filter
+
+```shell
+convert origin.jpg -resize 400% output.png
+```
+
+![browser](images/1.png)
+
+### Upscale 4x with waifu2x scale=2 model=upconv_7_photo twice
+
+```shell
+waifu2x-ncnn-vulkan.exe -i origin.jpg -o 2x.png -s 2 -m models-upconv_7_photo
+waifu2x-ncnn-vulkan.exe -i 2x.png -o 4x.png -s 2 -m models-upconv_7_photo
+```
+
+![waifu2x](images/w.png)
+
+### Upscale 4x with srmd noise=3 scale=4
+
+```shell
+srmd-ncnn-vulkan.exe -i origin.jpg -o output.png -n 3 -s 4
+```
+
+![srmd](images/2.png)
 
 ## Original SRMD Project
 
